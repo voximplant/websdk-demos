@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voximplant push notifications demo page</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-family: Roboto, Verdana;
+        }
+
+        #subscribe {
+            height: 48px;
+            padding: 18px 24px;
+            font-family: Roboto Mono, Verdana;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 12px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            background: #662EFF;
+            border: none;
+            border-radius: 4px;
+        }
+
+        #status {
+            padding: 40px 0 16px;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 24px;
+            color: #1C0B43;
+        }
+
+        #answer,
+        #hangup {
+            box-sizing: border-box;
+            height: 32px;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #252525;
+            background-color: #FFFFFF;
+            border: 1px solid #E2E5EC;
+            border-radius: 4px;
+        }
+
+        #answer[disabled],
+        #hangup[disabled] {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+<div id="app" hidden>
+    <div>
+        <button id="subscribe">Get push notifications when offline</button>
+    </div>
+    <div id="status">No ongoing calls</div>
+    <div>
+        <button id="answer" disabled>Answer</button>
+        <button id="hangup" disabled>Hang up</button>
+    </div>
+</div>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+<!-- Add Firebase messaging SDK -->
+<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-messaging.js"></script>
+<!-- Add Voximplant Web SDK -->
+<script src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+<!-- Your app logic  -->
+<script src="main.js"></script>
+</body>
+</html>

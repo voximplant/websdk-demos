@@ -1,0 +1,14 @@
+{
+  "name": "web-sdk-push-notifications",
+  "version": "1.0.0",
+  "description": "Voximplant push notifications for web demo",
+  "private": true,
+  "homepage": "http://voximplant.com",
+  "main": "app/index.html",
+  "scripts": {
+    "start": "node server ./app/"
+  },
+  "author": "Zingaya Inc. <info@voximplant.com> (http://voximplant.com)",
+  "license": "Commercial",
+  "dependencies": {}
+}
