@@ -39,6 +39,7 @@ const sdk = VoxImplant.getInstance();
 * Variable to check if a call from a push notification can be connected
 * */
 let isLoggedIn = false;
+
 /*
 * Incoming call from a push notification waiting for login
 * */
@@ -63,86 +64,16 @@ navigator.serviceWorker.onmessage = (payload) => {
 };
 
 /*
-* localStorage keys
-* */
-const lsTokensKey = 'voximplant_tokens';
-const lsDeviceKey = 'voximplant_device_id';
-
-/*
-  * Get a Voximplant device ID
-  * */
-let deviceId = localStorage.getItem(lsDeviceKey);
-
-if (!deviceId) {
-  deviceId = sdk.getGUID();
-  localStorage.setItem(lsDeviceKey, deviceId);
-}
-/*
-* Get stored Voximplant tokens
-* */
-const lastTokens = localStorage.getItem(lsTokensKey);
-
-/*
 * Initialize Web SDK, connect to the Voximplant cloud and run your app logic
 * */
 sdk.init()
   .then(() => sdk.connect(false))
-.then(() => {
-  console.log('[VOX] SDK connected');
-  return logIntoVoxCloud();
-})
-.then(runApp)
-.catch(handleLoginError);
-
-/*
-* login and auto login with token
-* */
-function logIntoVoxCloud() {
-  /*
-  * Log into Voximplant cloud
-  * */
-  if (lastTokens) {
-    console.log('[VOX] last session tokens found');
-
-    return sdk.loginWithToken(demoUser, JSON.parse(lastTokens).accessToken, {deviceToken: deviceId});
-  } else {
-    console.log('[VOX] no tokens found. Basic logging in');
-
-    return sdk.login(demoUser, demoPassword, {deviceToken: deviceId});
-  }
-};
-
-/*
-* login error handler
-* */
-function handleLoginError(err) {
-  /*
-  * Login with refreshToken if accessToken has expired
-  * */
-  if (err.code === 701) {
-    console.log('[VOX] can`t login with access token. Logging in with refresh token', err);
-
-    sdk.loginWithToken(demoUser, JSON.parse(lastTokens).refreshToken, {deviceToken: deviceId})
-      .then((result) => {
-      /*
-      * Update tokens in localStorage
-      * */
-      localStorage.setItem(lsTokensKey, JSON.stringify(result.tokens), {deviceToken: deviceId});
-    runApp();
+  .then(() => {
+    console.log('[VOX] SDK connected');
+    return logIntoVoxCloud();
   })
-  .catch((result) => {
-      console.log('[VOX] can`t login with access token. Basic logging in');
-
-    sdk.login(demoUser, demoPassword, {deviceToken: deviceId})
-      .then(runApp);
-  })
-  } else {
-    console.log('[VOX] can`t login with access token. Basic logging in');
-
-    sdk.login(demoUser, demoPassword, {deviceToken: deviceId})
-      .then(runApp);
-  }
-};
+  .then(runApp)
+  .catch(handleLoginError);
 
 /*
 * To call after logging into Voximplant cloud

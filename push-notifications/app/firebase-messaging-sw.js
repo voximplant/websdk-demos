@@ -1,9 +1,7 @@
 /*
 * ToDo: replace YOUR_SENDER_ID with the one from your Firebase app - https://console.firebase.google.com/u/0/project/_/settings/cloudmessaging/
 * */
-const config = {
-  YOUR_SENDER_ID: '1111111111111',
-};
+const YOUR_SENDER_ID = '1111111111111';
 
 /*
 * Give the service worker access to Firebase Messaging.
@@ -15,7 +13,7 @@ importScripts('https://www.gstatic.com/firebasejs/6.1.0/firebase-messaging.js');
 * Initialize the Firebase app in the service worker by passing in the messagingSenderId
 * */
 firebase.initializeApp({
-  'messagingSenderId': config.YOUR_SENDER_ID
+  'messagingSenderId': YOUR_SENDER_ID
 });
 
 /*
