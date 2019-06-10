@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <meta charset="UTF-8">
+    <title>Voximplant auto Login demo page</title>
+</header>
+<style>
+    html {
+        font-size: 16px;
+        font-family: monospace;
+        min-width: 100%;
+        min-height: 100vh;
+    }
+    body {
+        margin: 0;
+        background-color: rgba(0,0,0,0.03)
+    }
+    .form-name {
+        font-size: 24px;
+        margin-bottom: 21px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header-label {
+        margin-left: 8vh;
+        margin-top: 8vh;
+    }
+
+    .demo-ruleForm {
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-items: flex-end;
+    }
+    .demo-ruleForm[hidden] {
+        display: none;
+    }
+    .form-item {
+        width: 100%;
+        flex: 1 1 100%;
+        text-align: right;
+        margin-bottom: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .form-item[hidden] {
+        display: none;
+    }
+    .form-input {
+        padding: 6px 12px;
+        border-radius: 4px;
+        background-color: rgba(0,0,0,0.03);
+        border: 1px solid darkgray;
+    }
+    .form-input__label {
+        margin-right: 10px;
+    }
+    .form-item.form-checkbox {
+        justify-content: flex-end;
+    }
+    .checkbox-label {
+        padding-right: 8px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .form-submit {
+        padding: 12px 33px;
+        box-shadow: none;
+        font-size: 16px;
+        background: none;
+        cursor: pointer;
+        border: 1px solid;
+    }
+    .token-clear {
+        padding: 8px 17px;
+        box-shadow: none;
+        margin-left: 8vh;
+        font-size: 13px;
+        background: none;
+        cursor: pointer;
+        border: 1px solid;
+    }
+    .login-successful {
+        font-size: 25px;
+        text-align: center;
+
+    }
+    .login-failed {
+        text-align: left;
+        margin-top: 20px;
+        padding-left: 20px;
+        width: 25%;
+        background-color: red;
+    }
+    .form-submit:hover, .token-clear:hover {
+        cursor: pointer;
+        border: 1px solid blueviolet;
+        box-shadow: 0px 0px 3px blueviolet;
+    }
+    .form-wrap {
+        margin-top: 13vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+</style>
+<body>
+    <div class="layout">
+        <h1 class="header-label">Voximplant demo auto Login</h1>
+        <button type="primary" class="token-clear" onclick="Auth.prototype.removeTokens(true)" hidden>Exit</button>
+        <div class="form-wrap">
+            <form class="demo-ruleForm" hidden>
+                <div class="form-name">Login Form</div>
+                <div class="form-item" >
+                    <span class="form-input__label"> Username </span>
+                    <input type="text" id="user" class="form-input is-login" required />
+                </div>
+                <div class="form-item" hidden>
+                    <span class="form-input__label"> Password </span>
+                    <input type="password" id="password" class="form-input is-password" required/>
+                </div>
+                <div class="form-item form-checkbox">
+                    <label for="rememberData" class="checkbox-label">Remember me</label>
+                    <input type="checkbox" class="checkbox-input" id="rememberData" />
+                </div>
+                <div class="form-item">
+                    <div class="form-item__button">
+                        <button type="primary" class="form-submit">Sign in</button>
+                    </div>
+                </div>
+            </form>
+            <div class="login-successful" hidden>Congratulations! You are logged in! Click "Exit" to exit from the app</div>
+            <div class="login-failed" hidden>Your password or username is incorrect</div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+<script type="text/javascript" src="./index.js"></script>
+</html>
