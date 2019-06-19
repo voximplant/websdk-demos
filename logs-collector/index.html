@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <meta charset="UTF-8">
+    <title>Voximplant logger collector demo page</title>
+</header>
+<style>
+    html {
+        font-size: 16px;
+        font-family: monospace;
+        min-width: 100%;
+        min-height: 100vh;
+    }
+    body {
+        margin: 0;
+        background-color: rgba(0,0,0,0.03)
+    }
+    .form-name {
+        font-size: 24px;
+        margin-bottom: 21px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header-label {
+        margin-left: 8vh;
+        margin-top: 8vh;
+    }
+
+    .demo-ruleForm {
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-items: flex-end;
+    }
+    .demo-ruleForm[hidden] {
+        display: none;
+    }
+    .form-item {
+        width: 100%;
+        flex: 1 1 100%;
+        text-align: right;
+        margin-bottom: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .form-item[hidden] {
+        display: none;
+    }
+    .form-input {
+        padding: 6px 12px;
+        border-radius: 4px;
+        background-color: rgba(0,0,0,0.03);
+        border: 1px solid darkgray;
+    }
+    .form-input__label {
+        margin-right: 10px;
+    }
+    .form-item.form-checkbox {
+        justify-content: flex-end;
+    }
+    .checkbox-label {
+        padding-right: 8px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .form-submit {
+        padding: 12px 33px;
+        box-shadow: none;
+        font-size: 16px;
+        background: none;
+        cursor: pointer;
+        border: 1px solid;
+    }
+    .token-clear {
+        padding: 8px 17px;
+        box-shadow: none;
+        margin-left: 8vh;
+        font-size: 13px;
+        background: none;
+        cursor: pointer;
+        border: 1px solid;
+    }
+    .login-successful {
+        font-size: 25px;
+        text-align: center;
+
+    }
+    .login-failed, .phone-incorrect {
+        text-align: left;
+        margin-top: 20px;
+        padding-left: 20px;
+        width: 25%;
+        background-color: red;
+    }
+    .form-submit:hover, .token-clear:hover {
+        cursor: pointer;
+        border: 1px solid blueviolet;
+        box-shadow: 0px 0px 3px blueviolet;
+    }
+    .form-wrap {
+        margin-top: 13vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+    #call-number {
+        padding: 9px 14px;
+        border: 1px solid gray;
+    }
+    .status-call {
+        margin-bottom: 20px;
+        text-decoration: underline;
+    }
+    .call-form {
+        width: 30%;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .call-form[hidden] {
+        display: none !important;
+    }
+    .call-form h2 {
+        align-self: flex-start;
+    }
+    #report {
+        position: fixed;
+        top: 30px;
+        right: 90px;
+    }
+    #status-call {
+        background-color: lawngreen;
+    }
+    #overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0,0,0,0.5);
+    }
+    #exit-popup {
+        position: absolute;
+        top: 4px;
+        padding: 4px;
+        right: 4px;
+        cursor: pointer;
+    }
+    .popup-logger {
+        position: fixed;
+        z-index: 999;
+        width: 100%;
+        max-width: 300px;
+        height: 100px;
+        background-color: rgba(255,255,255, 0.8);
+        border-radius: 2px;
+    }
+    .popup-logger__wrapper {
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        padding: 8px 17px;
+        box-shadow: none;
+        font-size: 13px;
+        background: none;
+        cursor: pointer;
+        border: 1px solid;
+    }
+    button:hover {
+        cursor: pointer;
+        border: 1px solid blueviolet;
+        box-shadow: 0px 0px 3px blueviolet;
+    }
+</style>
+<body>
+    <div class="layout">
+        <h1 class="header-label">Voximplant demo logger collector</h1>
+        <button type="primary" class="token-clear" onclick="Auth.prototype.removeTokens(true)" hidden>Exit</button>
+
+        <div class="form-wrap">
+            <form class="demo-ruleForm" hidden>
+                <div class="form-name">Login Form</div>
+                <div class="form-item" >
+                    <span class="form-input__label"> Username </span>
+                    <input type="text" id="user" class="form-input is-login" required />
+                </div>
+                <div class="form-item" hidden>
+                    <span class="form-input__label"> Password </span>
+                    <input type="password" id="password" class="form-input is-password" required/>
+                </div>
+                <div class="form-item form-checkbox">
+                    <label for="rememberData" class="checkbox-label">Remember me</label>
+                    <input type="checkbox" class="checkbox-input" id="rememberData" />
+                </div>
+                <div class="form-item">
+                    <div class="form-item__button">
+                        <button type="primary" class="form-submit">Sign in</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="call-form" id="call-form" hidden>
+                <h2>
+                    Call form
+                </h2>
+                <div class="form">
+                    <input type="tel" id="call-number" required placeholder="Phone number to call..." >
+                    <button id="call-button"> Call </button>
+                    <button id="hangup" hidden> Hangup </button>
+                    <button id="accept" hidden> Accept </button>
+                    <button id="decline" hidden> Decline </button>
+                </div>
+                <button id="report" hidden> Report </button>
+            </div>
+            <div class="login-successful" hidden>Congratulations! You are logged in! Click "Exit" to exit the app</div>
+            <div class="login-failed" hidden>Your password or username is incorrect</div>
+            <div class="phone-incorrect" hidden>The phone number hasn’t been specified or doesn’t exist</div>
+            <div id="overlay" hidden></div>
+            <div class="popup-logger" hidden>
+                <div class="popup-logger__wrapper">
+                    <div id="exit-popup">x</div>
+                    <div class="popup-text"> The report has been sent! </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+<script type="text/javascript" src="login.js"></script>
+<script type="text/javascript" src="logger.js"></script>
+</html>
