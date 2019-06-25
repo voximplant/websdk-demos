@@ -2,22 +2,22 @@ This demo shows how one can use Voximplant call statistics and analytics to coll
 
 # Demo setup
 
-- Use an existing Voximplant application where you two users and a scenario forwarding a call from one to another or create a new one:
-  - Create an application in Voximplant control panel
+- Use an existing Voximplant application that has two users and a scenario forwarding a call from one to another or create a new one:
+  - Create an application in [Voximplant control panel](https://manage.voximplant.com/applications)
   - Create two users in that application
   - Create a scenario called ```callsrv``` (or else) with the following script:
   
     ```VoxEngine.forwardCallToUser((call1, call2) => {}, true);```
   - Add a rule called ```all``` (or else) and assign your ```callsrv``` scenario to that rule
 - Clone this repo 
-- Change ```MY_APP``` constant to your Voximplant application name.
+- Change ```MY_APP``` constant to your Voximplant application name
 - Run ```npm run start```
 - Open http://127.0.0.1:3000 in two browser tabs and login two different Voximplant application users
 - Call from one browser tab and answer to a call in the second one 
 - Enjoy the statistics
 
 Additionally:
-- To see all the statistics events that are dispatched, open your browser console
+- To see all triggered statistics events, open your browser console
 - ```RTCStatsReceived``` and ```CallStatsReceived``` events are triggered at 10 000ms by default. Change [rtcStatsCollectionInterval](https://voximplant.com/docs/references/websdk/voximplant/config#rtcstatscollectioninterval) option in the config you pass to ```Client.init()``` to set your interval. Minimum interval is 500ms.
 
 # Call statistics 
