@@ -17,8 +17,8 @@ This demo shows how one can use Voximplant call statistics and analytics to coll
 - Enjoy the statistics
 
 Additionally:
-- To see all triggered statistics events, open your browser console
-- ```RTCStatsReceived``` and ```CallStatsReceived``` events are triggered at 10 000ms by default. Change [rtcStatsCollectionInterval](https://voximplant.com/docs/references/websdk/voximplant/config#rtcstatscollectioninterval) option in the config you pass to ```Client.init()``` to set your interval. Minimum interval is 500ms.
+- To see all the triggered statistics events, open your browser console
+- ```RTCStatsReceived``` and ```CallStatsReceived``` events are triggered at 10 000ms by default. Change [rtcStatsCollectionInterval](https://voximplant.com/docs/references/websdk/voximplant/config#rtcstatscollectioninterval) option in the config you pass to [Client.init()](https://voximplant.com/docs/references/websdk/voximplant/client#init) to set your interval. Minimum interval is 500ms.
 
 # Call statistics 
 
@@ -26,11 +26,15 @@ Voximplant Web SDK provides two types of client side statistics for a call. You 
 
 The first one is raw browser statistics for call RTPs. Its format may vary from one browser to another and change in every new browser version. To receive it, subscribe to the [VoxImplant.CallEvents.RTCStatsReceived](https://voximplant.com/docs/references/websdk/voximplant/callevents#rtcstatsreceived) event related to your call:
 
-```call.on(VoxImplant.CallEvents.RTCStatsReceived, (e) => console.log(e.stats));```
+```javascript
+call.on(VoxImplant.CallEvents.RTCStatsReceived, (e) => console.log(e.stats));
+```
 
 The second one is prepared and more reliable Voximplant [CallStats](https://voximplant.com/docs/references/websdk/voximplant/statistic/callstats). We strongly recommend to use this one as it’s stable and wide enough to analyze connection and media streams problems and build graphs. To get it, listen to the [VoxImplant.CallEvents.CallStatsReceived](https://voximplant.com/docs/references/websdk/voximplant/callevents#callstatsreceived) event related to your call:
 
-```call.on(VoxImplant.CallEvents.CallStatsReceived, (e) => console.log(e.stats));```
+```javascript
+call.on(VoxImplant.CallEvents.CallStatsReceived, (e) => console.log(e.stats));
+```
 
 **Note!** Not all fields in the stats dictionary are available in all browsers. Check the [reference](https://voximplant.com/docs/references/websdk/voximplant/statistic) for the fields you need.
  
