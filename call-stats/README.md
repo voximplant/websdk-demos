@@ -18,7 +18,7 @@ This demo shows how one can use Voximplant call statistics and analytics to coll
 
 Additionally:
 - To see all the triggered statistics events, open your browser console
-- ```RTCStatsReceived``` and ```CallStatsReceived``` events are triggered at 10 000ms by default. Change [rtcStatsCollectionInterval](https://voximplant.com/docs/references/websdk/voximplant/config#rtcstatscollectioninterval) option in the config you pass to [Client.init()](https://voximplant.com/docs/references/websdk/voximplant/client#init) to set your interval. Minimum interval is 500ms.
+- ```RTCStatsReceived``` and ```CallStatsReceived``` events are triggered at 10000ms interval by default. Change [rtcStatsCollectionInterval](https://voximplant.com/docs/references/websdk/voximplant/config#rtcstatscollectioninterval) option in the config you pass to [Client.init()](https://voximplant.com/docs/references/websdk/voximplant/client#init) to set your interval. Minimum interval is 500ms.
 
 # Call statistics 
 
