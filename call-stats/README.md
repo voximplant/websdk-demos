@@ -2,7 +2,7 @@ This demo shows how one can use Voximplant call statistics and analytics to coll
 
 # Demo setup
 
-- Use an existing Voximplant application that has two users and a scenario forwarding a call from one to another or create a new one:
+- Use an existing Voximplant application that has two users and a scenario forwarding a call from one to another, or create a new one:
   - Create an application in [Voximplant control panel](https://manage.voximplant.com/applications)
   - Create two users in that application
   - Create a scenario called ```callsrv``` (or else) with the following script:
@@ -22,19 +22,19 @@ Additionally:
 
 # Call statistics 
 
-Voximplant Web SDK provides two types of client side statistics for a call. You get both in the argument of a callback function registered for a specific event.
+Voximplant Web SDK provides two types of client side statistics for a call. You get both in the argument of a handler function registered for a specific event.
 
-The first one is a raw browser statistics for call RTPs. Its format may vary from one browser to another and change in every new browser version. To receive it, subscribe to the ```VoxImplant.CallEvents.RTCStatsReceived``` event related to your call:
+The first one is raw browser statistics for call RTPs. Its format may vary from one browser to another and change in every new browser version. To receive it, subscribe to the [VoxImplant.CallEvents.RTCStatsReceived](https://voximplant.com/docs/references/websdk/voximplant/callevents#rtcstatsreceived) event related to your call:
 
 ```call.on(VoxImplant.CallEvents.RTCStatsReceived, (e) => console.log(e.stats));```
 
-The second one is prepared and more reliable Voximplant [CallStats](https://voximplant.com/docs/references/websdk/voximplant/statistic/callstats). We strongly recommend to use this one as it’s stable and wide enough to analyze connection and media streams problems and build graphs. To get it, listen to the ```VoxImplant.CallEvents.CallStatsReceived``` event related to your call:
+The second one is prepared and more reliable Voximplant [CallStats](https://voximplant.com/docs/references/websdk/voximplant/statistic/callstats). We strongly recommend to use this one as it’s stable and wide enough to analyze connection and media streams problems and build graphs. To get it, listen to the [VoxImplant.CallEvents.CallStatsReceived](https://voximplant.com/docs/references/websdk/voximplant/callevents#callstatsreceived) event related to your call:
 
 ```call.on(VoxImplant.CallEvents.CallStatsReceived, (e) => console.log(e.stats));```
 
-**Note!** Not all fields in the stats dictionary are available in all browsers.Check the reference for the fields you need.
+**Note!** Not all fields in the stats dictionary are available in all browsers. Check the [reference](https://voximplant.com/docs/references/websdk/voximplant/statistic) for the fields you need.
  
-*If you think some parameters are worth adding to this report, please create an issue here to request it.*
+*If you think some parameters are worth adding to the report CallStats, please create an issue here to request it.*
 
 # Call quality analytics
 
@@ -50,7 +50,7 @@ Voximplant Web SDK analyzes call quality and reports issues occurring during the
 
 [VoxImplant.CallEvents.QualityIssuePacketLoss](https://voximplant.com/docs/references/websdk/voximplant/callevents#qualityissuepacketloss)
 
-There’re 4 [severity levels](https://voximplant.com/docs/references/websdk/voximplant/statistic/qualityissuelevel) for quality issues: ```‘NONE’```, ```‘MINOR’```, ```‘MAJOR’``` and ```‘CRITICAL’```.
+There’re [4 severity levels](https://voximplant.com/docs/references/websdk/voximplant/statistic/qualityissuelevel) for quality issues: ```NONE```, ```MINOR```, ```MAJOR``` and ```CRITICAL```.
 
 Subscribe to quality issue events like any other call event:
 
@@ -90,6 +90,6 @@ call.on(VoxImplant.CallEvents.QualityIssuePacketLoss, (e) => {
 });
 ```
 
-**Note!** Some quality issues can be reported only in Chrome.Check the reference for the issues you need.
+**Note!** Some quality issues can be reported only in Chrome. Check the reference for the issues you need.
 
-*If you think any other quality problem worth reporting, please create an issue here to request it.*
+*If you think any other quality problem is worth reporting, please create an issue here to request it.*
