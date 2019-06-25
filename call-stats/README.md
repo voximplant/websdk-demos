@@ -10,7 +10,7 @@ This demo shows how one can use Voximplant call statistics and analytics to coll
     ```VoxEngine.forwardCallToUser((call1, call2) => {}, true);```
   - Add a rule called ```all``` (or else) and assign your ```callsrv``` scenario to that rule
 - Clone this repo 
-- Change ```MY_APP``` constant to your Voximplant application name
+- Change ```MY_APP``` constant in ```main.js``` to your Voximplant application name
 - Run ```npm run start```
 - Open http://127.0.0.1:3000 in two browser tabs and login two different Voximplant application users
 - Call from one browser tab and answer to a call in the second one 
