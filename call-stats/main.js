@@ -162,6 +162,7 @@ const addCallStatsListeners = (call) => {
 * */
 
 const endCall = () => {
+  document.getElementById('with-video').disabled = false;
   document.getElementById('hangup').classList.add('hidden');
   document.getElementById('answer').classList.add('hidden');
   document.getElementById('call').classList.remove('hidden');
@@ -191,15 +192,25 @@ const endCall = () => {
 
 const makeCall = () => {
   const number = document.getElementById('number').value;
+  const withVideo = document.getElementById('with-video').checked;
 
   if (!number) {
     document.getElementById('number-error').innerText = 'Number required';
   } else {
-    const call = sdk.call({number: number, video: true, VP8first: true});
+    const call = sdk.call({
+      number: number,
+      video: withVideo,
+      H264first: true // if you want to use H264 codec
+    });
 
     console.log(`[DEMO]: A call to ${number}`);
-    VoxImplant.Hardware.StreamManager.get().showLocalVideo();
+
+    if (withVideo) {
+      //render local video
+      VoxImplant.Hardware.StreamManager.get().showLocalVideo();
+    }
     //transform ui
+    document.getElementById('with-video').disabled = true;
     document.getElementById('call-number').classList.add('hidden');
     document.getElementById('status').classList.remove('hidden');
     document.getElementById('status').innerText = `Calling ${number}...`;
@@ -224,48 +235,29 @@ const makeCall = () => {
       console.log(`[DEMO]: Call failed: ${e.reason} (${e.code})`);
       endCall();
     });
-    call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
-      //render inbound video when it's received
-      e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
-        console.log('[DEMO]: Remote media added', ev.mediaRenderer);
-        ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
+
+    if (withVideo) {
+      //render inbound video
+      call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
+        //render inbound video when it's received
+        e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
+          console.log('[DEMO]: Remote media added', ev.mediaRenderer);
+          ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
+        });
       });
-    });
+    }
+
     //call stats event listeners
     addCallStatsListeners(call);
-
-    //rearrange codecs to check that QualityIssueCodecMismatch is working
-    call.rearangeCodecs = (codecList) => {
-      return new Promise((resolve) => {
-        for (let i = 0; i < codecList.sections.length; i++) {
-          if (codecList.sections[i].kind.toLowerCase() === "audio") {
-            codecList.sections[i].codec.sort((a, b) => {
-              if (a.toLowerCase().indexOf("isac/16000") !== -1)
-                return -1;
-              if (b.toLowerCase().indexOf("opus/48000/2") !== -1)
-                return 1;
-              return 0;
-            });
-          }
-          if (codecList.sections[i].kind.toLowerCase() === 'video') {
-            codecList.sections[i].codec.sort((a, b) => {
-              if (a.toUpperCase().indexOf("H264") !== -1)
-                return -1;
-              if (b.toUpperCase().indexOf("VP8") !== -1)
-                return 1;
-              return 0;
-            });
-          }
-        }
-        resolve(codecList);
-      });
-    };
   }
 };
 
 const receiveCall = (e) => {
+  const withVideo = document.getElementById('with-video').checked;
+
   console.log(`[DEMO]: A call from ${e.call.number()}`);
   //transform ui
+  document.getElementById('with-video').disabled = true;
   document.getElementById('call-number').classList.add('hidden');
   document.getElementById('status').classList.remove('hidden');
   document.getElementById('status').innerText = `${e.call.number()} is calling...`;
@@ -274,8 +266,13 @@ const receiveCall = (e) => {
   document.getElementById('hangup').classList.remove('hidden');
   //answer handler
   document.getElementById('answer').onclick = () => {
-    e.call && e.call.answer();
-    VoxImplant.Hardware.StreamManager.get().showLocalVideo();
+    e.call && e.call.answer('', {}, {receiveVideo: withVideo, sendVideo: withVideo});
+
+    if (withVideo) {
+      //render inbound video
+      VoxImplant.Hardware.StreamManager.get().showLocalVideo();
+    }
+
     console.log(`[DEMO]: Call from ${e.call.number()} answered`);
     document.getElementById('status').innerText = `Talking with ${e.call.number()}.`;
     document.getElementById('answer').classList.add('hidden');
@@ -294,13 +291,18 @@ const receiveCall = (e) => {
     console.log(`[DEMO]: Call failed: ${e.reason} (${e.code})`);
     endCall();
   });
-  e.call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
-    //render inbound video when it's received
-    e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
-      console.log('[DEMO]: Remote media added');
-      ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
+
+  if (withVideo) {
+    //render inbound video
+    e.call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
+      //render inbound video when it's received
+      e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
+        console.log('[DEMO]: Remote media added');
+        ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
+      });
     });
-  });
+  }
+
   //call stats event listeners
   addCallStatsListeners(e.call);
 };
@@ -313,11 +315,10 @@ sdk.on(VoxImplant.Events.ConnectionClosed, () => {
 
 //init Voximplant
 sdk.init({
-  // showDebugInfo: true,
-  // prettyPrint: false,
-  video: true,
-  localVideoContainerId: 'local-video',
-  videoConstraints: {width: 640, height: 480},
+  // showDebugInfo: true, // show SDK logs to debug
+  // prettyPrint: false, // prettify SDK logs
+  localVideoContainerId: 'local-video', // DOM element to render inbound video
+  videoConstraints: {width: 640, height: 480}, // preferred video resolution
   rtcStatsCollectionInterval: 5000 //default is 10000 ms, minimum interval is 500 ms
 })
   .then(() => {

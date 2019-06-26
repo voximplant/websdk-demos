@@ -50,6 +50,18 @@
             padding-right: 12px;
         }
 
+        .checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .checkbox label {
+            margin-left: 4px;
+            line-height: 12px;
+        }
+
         button {
             margin: 8px 0;
             height: 32px;
@@ -252,6 +264,10 @@
         <div id="call-number">
             <label for="number">Number</label>
             <input type="text" id="number">
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="with-video" checked>
+            <label for="with-video">With video</label>
         </div>
         <div id="dialer-footer">
             <span id="number-error"></span>
