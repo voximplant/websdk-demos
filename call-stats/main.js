@@ -64,8 +64,8 @@ const addCallStatsListeners = (call) => {
       document.getElementById('local-audio-codec').innerText = localAudio.codec || '?';
     }
 
-    document.getElementById('local-viewport').innerText = document.getElementById('local-video').childNodes[0]
-      ? `${document.getElementById('local-video').childNodes[0].width}x${document.getElementById('local-video').childNodes[0].height}`
+    document.getElementById('local-viewport').innerText = document.getElementById('local-video').lastChild && document.getElementById('local-video').lastChild.nodeName === 'VIDEO'
+      ? `${document.getElementById('local-video').lastChild.width}x${document.getElementById('local-video').lastChild.height}`
       : '0x0';
     document.getElementById('local-connection-speed').innerText = e.stats.availableOutgoingBitrate ? `${Number(e.stats.availableOutgoingBitrate).toLocaleString()} bps` : '?';
     document.getElementById('local-packets').innerText = `${Number(e.stats.totalPacketsSent).toLocaleString()} sent`;
@@ -89,8 +89,8 @@ const addCallStatsListeners = (call) => {
           document.getElementById('inbound-audio-codec').innerText = inboundAudioStats[1].codec || '?';
         }
 
-        document.getElementById('inbound-viewport').innerText = document.getElementById('inbound-video').childNodes[0]
-          ? `${document.getElementById('inbound-video').childNodes[0].width}x${document.getElementById('inbound-video').childNodes[0].height}`
+        document.getElementById('inbound-viewport').innerText = document.getElementById('inbound-video').lastChild && document.getElementById('inbound-video').lastChild.nodeName === 'VIDEO'
+          ? `${document.getElementById('inbound-video').lastChild.width}x${document.getElementById('inbound-video').lastChild.height}`
           : '0x0';
         document.getElementById('inbound-packets').innerText = `${e.stats.totalPacketsLost} of ${Number(e.stats.totalPacketsReceived).toLocaleString()} lost`;
         document.getElementById('inbound-packets-loss').innerText = `${(e.stats.totalLoss * 100).toFixed(4)}%`;
@@ -236,17 +236,6 @@ const makeCall = () => {
       endCall();
     });
 
-    if (withVideo) {
-      //render inbound video
-      call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
-        //render inbound video when it's received
-        e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
-          console.log('[DEMO]: Remote media added', ev.mediaRenderer);
-          ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
-        });
-      });
-    }
-
     //call stats event listeners
     addCallStatsListeners(call);
   }
@@ -292,17 +281,6 @@ const receiveCall = (e) => {
     endCall();
   });
 
-  if (withVideo) {
-    //render inbound video
-    e.call.addEventListener(VoxImplant.CallEvents.EndpointAdded, (e) => {
-      //render inbound video when it's received
-      e.endpoint.addEventListener(VoxImplant.EndpointEvents.RemoteMediaAdded, (ev) => {
-        console.log('[DEMO]: Remote media added');
-        ev.mediaRenderer && ev.mediaRenderer.render(document.getElementById(ev.mediaRenderer.kind === 'audio' ? 'inbound-audio' : 'inbound-video'));
-      });
-    });
-  }
-
   //call stats event listeners
   addCallStatsListeners(e.call);
 };
@@ -317,7 +295,8 @@ sdk.on(VoxImplant.Events.ConnectionClosed, () => {
 sdk.init({
   // showDebugInfo: true, // show SDK logs to debug
   // prettyPrint: false, // prettify SDK logs
-  localVideoContainerId: 'local-video', // DOM element to render inbound video
+  localVideoContainerId: 'local-video', // DOM element to render local video
+  remoteVideoContainerId: 'inbound-video', // DOM element to render inbound video
   videoConstraints: {width: 640, height: 480}, // preferred video resolution
   rtcStatsCollectionInterval: 5000 //default is 10000 ms, minimum interval is 500 ms
 })
