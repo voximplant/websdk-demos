@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>Automatic call restoration Demo Page</title>
+</header>
+<style>
+    html {
+        font-size: 16px;
+        font-family: Roboto;
+        min-width: 100%;
+        min-height: 100vh;
+    }
+    body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    button {
+        font-size: 12px;
+        height: 32px;
+        font-weight: 500;
+        line-height: 12px;
+        cursor: pointer;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        font-family: Roboto;
+        padding: 0 16px;
+        border: none;
+        border-radius: 4px;
+        background: #662EFF;
+    }
+    button[hidden] {
+        display: none;
+    }
+    *[hidden] {
+        display: none !important;
+    }
+    button:hover {
+        background: #5E38D9;
+    }
+    input[type="checkbox"] {
+        height: 0;
+        width: 0;
+        margin: 0;
+        user-select: none;
+    }
+    label {
+        cursor: pointer;
+    }
+    .checkbox-view {
+        width: 12px;
+        height: 12px;
+        cursor: pointer;
+        margin-right: 8px;
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMkMwIDAuODk1NDMxIDAuODk1NDMxIDAgMiAwSDEwQzExLjEwNDYgMCAxMiAwLjg5NTQzMSAxMiAyVjEwQzEyIDExLjEwNDYgMTEuMTA0NiAxMiAxMCAxMkgyQzAuODk1NDMxIDEyIDAgMTEuMTA0NiAwIDEwVjJaIiBmaWxsPSIjQ0VENERBIi8+CjxwYXRoIGQ9Ik0xIDJDMSAxLjQ0NzcyIDEuNDQ3NzIgMSAyIDFIMTBDMTAuNTUyMyAxIDExIDEuNDQ3NzIgMTEgMlYxMEMxMSAxMC41NTIzIDEwLjU1MjMgMTEgMTAgMTFIMkMxLjQ0NzcyIDExIDEgMTAuNTUyMyAxIDEwVjJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K);
+    }
+    .checkbox-view.checked {
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yIDBDMC44OTU0MzEgMCAwIDAuODk1NDMxIDAgMlYxMEMwIDExLjEwNDYgMC44OTU0MzEgMTIgMiAxMkgxMEMxMS4xMDQ2IDEyIDEyIDExLjEwNDYgMTIgMTBWMkMxMiAwLjg5NTQzMSAxMS4xMDQ2IDAgMTAgMEgyWk01Ljc0Nzg5IDcuODg4MDJMOC43ODk2NyA0LjgzMDk0QzkuMDcwMTEgNC41NDkwMyA5LjA3MDExIDQuMDkyNjMgOC43ODk2NyAzLjgxMTQ0QzguNTA5MjMgMy41Mjk1MiA4LjA1NTIzIDMuNTI5NTIgNy43NzU1MSAzLjgxMTQ0TDUuNzQ2NDYgNS44NTExN0M1LjQ2NjAyIDYuMTMyMzcgNS4wMTIwMSA2LjEzMjM3IDQuNzMyMjkgNS44NTExN0w0LjIyNDQ5IDUuMzQwN0MzLjk0NDc3IDUuMDU5NSAzLjQ5MDA1IDUuMDU5NSAzLjIxMDMzIDUuMzQwN0MyLjkyOTg5IDUuNjIyNjEgMi45Mjk4OSA2LjA3OTAxIDMuMjEwMzMgNi4zNjAyTDQuNzMwMTQgNy44ODgwMkM1LjAxMTMgOC4xNzA2NiA1LjQ2Njc0IDguMTcwNjYgNS43NDc4OSA3Ljg4ODAyWiIgZmlsbD0iIzY2MkVGRiIvPgo8L3N2Zz4K);
+    }
+
+    input[type="text"] {
+        padding: 0 8px;
+        height: 32px;
+        border-radius: 4px;
+        background-color: #ffffff;
+        border: 1px solid #D8DCE6;
+    }
+    .form-name {
+        font-size: 24px;
+        margin-bottom: 32px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .demo-ruleForm {
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-items: flex-end;
+    }
+    .demo-ruleForm[hidden] {
+        display: none;
+    }
+    .checkbox-input__wrapper {
+        display: flex;
+        margin-right: 20px;
+    }
+    .checkbox-input {
+        height: 0;
+        width: 0;
+        margin: 0;
+        position: relative;
+        user-select: none;
+    }
+    .checkbox-input::after {
+        width: 12px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: translate(0px, -50%);
+        height: 12px;
+        cursor: pointer;
+        margin-right: 8px;
+        content: '';
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMkMwIDAuODk1NDMxIDAuODk1NDMxIDAgMiAwSDEwQzExLjEwNDYgMCAxMiAwLjg5NTQzMSAxMiAyVjEwQzEyIDExLjEwNDYgMTEuMTA0NiAxMiAxMCAxMkgyQzAuODk1NDMxIDEyIDAgMTEuMTA0NiAwIDEwVjJaIiBmaWxsPSIjQ0VENERBIi8+CjxwYXRoIGQ9Ik0xIDJDMSAxLjQ0NzcyIDEuNDQ3NzIgMSAyIDFIMTBDMTAuNTUyMyAxIDExIDEuNDQ3NzIgMTEgMlYxMEMxMSAxMC41NTIzIDEwLjU1MjMgMTEgMTAgMTFIMkMxLjQ0NzcyIDExIDEgMTAuNTUyMyAxIDEwVjJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K);
+    }
+    .checkbox-input:checked::after {
+        content: '';
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yIDBDMC44OTU0MzEgMCAwIDAuODk1NDMxIDAgMlYxMEMwIDExLjEwNDYgMC44OTU0MzEgMTIgMiAxMkgxMEMxMS4xMDQ2IDEyIDEyIDExLjEwNDYgMTIgMTBWMkMxMiAwLjg5NTQzMSAxMS4xMDQ2IDAgMTAgMEgyWk01Ljc0Nzg5IDcuODg4MDJMOC43ODk2NyA0LjgzMDk0QzkuMDcwMTEgNC41NDkwMyA5LjA3MDExIDQuMDkyNjMgOC43ODk2NyAzLjgxMTQ0QzguNTA5MjMgMy41Mjk1MiA4LjA1NTIzIDMuNTI5NTIgNy43NzU1MSAzLjgxMTQ0TDUuNzQ2NDYgNS44NTExN0M1LjQ2NjAyIDYuMTMyMzcgNS4wMTIwMSA2LjEzMjM3IDQuNzMyMjkgNS44NTExN0w0LjIyNDQ5IDUuMzQwN0MzLjk0NDc3IDUuMDU5NSAzLjQ5MDA1IDUuMDU5NSAzLjIxMDMzIDUuMzQwN0MyLjkyOTg5IDUuNjIyNjEgMi45Mjk4OSA2LjA3OTAxIDMuMjEwMzMgNi4zNjAyTDQuNzMwMTQgNy44ODgwMkM1LjAxMTMgOC4xNzA2NiA1LjQ2Njc0IDguMTcwNjYgNS43NDc4OSA3Ljg4ODAyWiIgZmlsbD0iIzY2MkVGRiIvPgo8L3N2Zz4K);
+    }
+    .form-item {
+        width: 100%;
+        flex: 1 1 100%;
+        text-align: right;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .form-item[hidden] {
+        display: none;
+    }
+    .form-input {
+        padding: 0 8px;
+        height: 32px;
+        border-radius: 4px;
+        background-color: #ffffff;
+        border: 1px solid #D8DCE6;
+    }
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    .form-input__label {
+        margin-right: 8px;
+    }
+    .form-item.form-checkbox {
+        justify-content: flex-start;
+        flex-flow: row-reverse;
+    }
+    .form-checkbox.settings-form__item {
+        flex-flow: row;
+        margin-left: 40px;
+    }
+    .checkbox-label {
+        padding-right: 8px;
+        cursor: pointer;
+        user-select: none;
+    }
+    .login-successful {
+        border-bottom: 2px solid green;
+        margin-bottom: 16px;
+    }
+    .empty-fields {
+        border-bottom: 2px solid red;
+        margin-bottom: 16px;
+    }
+    .login-failed {
+        border-bottom: 2px solid red;
+        margin-bottom: 16px;
+    }
+    .form-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+
+</style>
+<body>
+<div class="layout">
+    <div class="form-wrap">
+        <form class="demo-ruleForm" hidden>
+            <div class="form-name">Login Form</div>
+            <div class="form-item" >
+                <span class="form-input__label"> Username </span>
+                <input type="text" id="user" class="form-input is-login" required />
+            </div>
+            <div class="form-item" hidden>
+                <span class="form-input__label"> Password </span>
+                <input type="password" id="password" class="form-input is-password" required/>
+            </div>
+            <div class="login-failed" hidden>Your password or username is incorrect</div>
+            <div class="checkbox-group">
+                <div class="form-item form-checkbox">
+                    <label for="rememberData" class="checkbox-label">Remember me</label>
+                    <div class="checkbox-input__wrapper">
+                        <input type="checkbox" class="checkbox-input" id="rememberData" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-item">
+                <div class="form-item__button">
+                    <button type="primary" class="form-submit">Sign in</button>
+                </div>
+            </div>
+        </form>
+        <div class="login-successful" hidden>Congratulations! You are logged in! Click "Exit" to exit the app</div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+</html>

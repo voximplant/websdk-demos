@@ -1,0 +1,27 @@
+.demogrid{
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: "actions media" "log media";
+    height: 100vh;
+}
+.demogrid__login{
+    grid-area: login;
+
+}
+.demogrid__action {
+    grid-area: actions;
+    align-self: start;
+    margin-right: 24px;
+    margin-left: 24px;
+}
+.demogrid__media{
+    grid-area: media;
+    background: #efefef;
+}
+.demogrid__media video{
+    border: solid #5E38D9 4px;
+}
+.demogrid__log{
+    grid-area: log;
+}

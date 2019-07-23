@@ -1,0 +1,16 @@
+.input__group_inline {
+    display: inline-block;
+    margin: 4px;
+}
+
+.input__group label {
+    display: block;
+    font-size: 16px;
+}
+
+.input__group input[type="text"] {
+    width: 200px;
+}
+.button__group_success{
+    background: chartreuse;
+}

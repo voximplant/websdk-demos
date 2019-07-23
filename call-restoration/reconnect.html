@@ -1,0 +1,62 @@
+<html lang="en" class="gr__testing_voxfront_ru"><head>
+  <meta charset="UTF-8">
+  <title>Automatic call restorationl Demo Page</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="css/demogrid.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/forms.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/project.css">
+  <script src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/auto-login.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body >
+<div class="demogrid">
+  <div class="demogrid__action">
+  <h1 class="page-header">Automatic call restoration Demo Page</h1>
+  <button type="primary" class="token-clear" onclick="removeTokens(true)" >Log out</button>
+    <span class="header-sub">Outgoing call</span>
+    <div class="call-group">
+      <div class="input__group">
+        <input id="call-number" type="text" placeholder="phone number" value="">
+        <span class="phone-incorrect" hidden>Phone incorrect</span>
+      </div>
+      <div id="call-settings">
+
+      </div>
+      <div class="button_group">
+        <button id="call-button"> Call </button>
+        <button id="hangup" hidden> Hang up </button>
+        <button id="accept" hidden> Accept </button>
+        <button id="decline" hidden> Decline </button>
+      </div>
+    </div>
+    <div id="reconnect-group">
+      <div id="try-reconnect" class="notify" hidden> Trying to restore... </div>
+      <div id="fail-reconnect" class="notify" hidden> Failed to restore </div>
+  </div>
+  <div class="demogrid__log">
+    <textarea id="logarea" style="width: 100%; height: calc(100vh - 260px); min-height: 55vh;"></textarea>
+  </div>
+</div>
+  <div class="demogrid__media" id="js__remoteVideoContainer"></div>
+</div>
+<script src="js/phone.js"></script>
+<script src="js/project.js"></script>
+<script>
+    const logger = new cLogger(document.getElementById('logarea'));
+
+  function removeTokens(bool) {
+    localStorage.removeItem('vox_token_a');
+    localStorage.removeItem('vox_token_r');
+    localStorage.removeItem('vox_login');
+    localStorage.removeItem('h264');
+    if (bool)  {
+        let location = window.location.href.replace('reconnect.html', '');
+        window.location.href =location;
+    }
+  }
+</script>
+</body>
+</html>
